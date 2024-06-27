@@ -15,7 +15,7 @@ app.event('member_joined_channel', async ({ context, payload }) => {
     if (payload.channel === process.env.CHANNEL) {
         await context.client.chat.postMessage({
             channel: process.env.CHANNEL!,
-            text: `A new member <@${payload.user}> has joined the <#${process.env.CHANNEL}> channel!`,
+            text: `Welcome <@${payload.user}> to <#${process.env.CHANNEL}>!`,
         });
     }
 });
@@ -26,8 +26,3 @@ export default {
         return await app.run(request);
     },
 };
-
-await app.client.chat.postMessage({
-    channel: process.env.CHANNEL!,
-    text: `Welcome to the <#${process.env.CHANNEL}> channel!`,
-});
