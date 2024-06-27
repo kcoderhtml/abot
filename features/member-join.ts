@@ -1,4 +1,4 @@
-import { SlackApp, type SlackAppLogLevel } from "slack-edge";
+import { SlackApp } from "slack-edge";
 
 const newMemberJoin = async (
     app: SlackApp<{
