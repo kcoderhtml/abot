@@ -1,4 +1,10 @@
 import { SlackApp } from "slack-edge";
+const version = require('./package.json').version
+
+console.log("----------------------------------\nABOT Server\n----------------------------------\n")
+console.log("🚀 Starting server")
+console.log("📦 Loading Slack App...")
+console.log("🔑 Loading environment variables...")
 
 const app = new SlackApp({
     env: {
@@ -26,3 +32,5 @@ export default {
         return await app.run(request);
     },
 };
+
+console.log("🚀 Server Started in", Bun.nanoseconds() / 1000000, "milliseconds on version:", version + "!", "\n\n----------------------------------\n")
