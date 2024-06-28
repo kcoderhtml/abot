@@ -13,6 +13,23 @@ const newMemberJoinHandlerP3 = async (
     app.action('guest-book-signed', async ({ payload, context }) => {
         console.log(`🗝️  locking the guest book back up for ${payload.user.name}.`);
 
+        const date = new Date();
+        // edit a canvas
+        await context.client.canvases.edit({
+            canvas_id: process.env.CANVAS_ID!,
+            changes: [
+                // @ts-ignore - this is a bug in the library
+                {
+                    operation: "insert_at_end",
+                    document_content: {
+                        type: "markdown",
+                        // @ts-ignore - this is a bug in the library
+                        markdown: `:lower_left_fountain_pen: On ${date.getDate()}/${date.getMonth()}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()} with ${date.getSeconds()} seconds completed in the minute @${payload.user.name} wrote: _${payload.actions[0].value}_` //  markdown: 
+                    },
+                }
+            ]
+        });
+
         // open the guest book
         await context.respond!({
             text: "The guest book has been signed!",
