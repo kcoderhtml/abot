@@ -25,7 +25,6 @@ const newMemberJoinHandlerP5 = async (
                         type: "mrkdwn",
                         text: `Abot stepped into the room and addressed the host. _"Our esteemed guest has arrived,"_ he announced with a respectful nod.`
                     },
-
                 },
                 {
                     type: "section",

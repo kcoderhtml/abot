@@ -11,23 +11,18 @@ const newMemberJoinHandlerP2 = async (
 ) => {
     // listen for new members joining the channel
     app.action('sign-guest-book', async ({ payload, context }) => {
-        console.log(`✒️ Opening guest book for ${payload.user.name}.`);
+        console.log(`✒️  Opening guest book for ${payload.user.name}.`);
 
         // open the guest book
         await context.respond!({
             text: "plz sign the guest book p2",
             blocks: [
                 {
-                    type: "context",
-                    elements: [
-                        {
-                            type: "mrkdwn",
-                            text: `Abot gestured towards an elegant, leather-bound book resting on a polished mahogany table. A fountain pen lay beside it, the kind that hinted at tradition and meticulous care.`
-                        },
-                    ]
-                },
-                {
-                    type: "divider"
+                    type: "section",
+                    text: {
+                        type: "mrkdwn",
+                        text: `Abot gestured towards an elegant, leather-bound book resting on a polished mahogany table. A fountain pen lay beside it, the kind that hinted at tradition and meticulous care.`
+                    },
                 },
                 {
                     type: "section",

@@ -11,23 +11,18 @@ const newMemberJoinHandlerP3 = async (
 ) => {
     // listen for new members joining the channel
     app.action('guest-book-signed', async ({ payload, context }) => {
-        console.log(`🛡️ locking the guest book back up for ${payload.user.name}.`);
+        console.log(`🗝️  locking the guest book back up for ${payload.user.name}.`);
 
         // open the guest book
         await context.respond!({
             text: "The guest book has been signed!",
             blocks: [
                 {
-                    type: "context",
-                    elements: [
-                        {
-                            type: "mrkdwn",
-                            text: `As you sign your name, you take in your surroundings. The entrance hall is grand, with high ceilings and intricate moldings. Antique furniture pieces are strategically placed, exuding an air of timeless elegance. A large mirror on the wall reflects the warm light, adding to the room's welcoming atmosphere.`
-                        },
-                    ]
-                },
-                {
-                    type: "divider"
+                    type: "section",
+                    text: {
+                        type: "mrkdwn",
+                        text: `As you sign your name, you take in your surroundings. The entrance hall is grand, with high ceilings and intricate moldings. Antique furniture pieces are strategically placed, exuding an air of timeless elegance. A large mirror on the wall reflects the warm light, adding to the room's welcoming atmosphere.`
+                    },
                 },
                 {
                     type: "section",

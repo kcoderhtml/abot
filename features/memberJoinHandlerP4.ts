@@ -18,16 +18,11 @@ const newMemberJoinHandlerP4 = async (
             text: "Greetings, host!",
             blocks: [
                 {
-                    type: "context",
-                    elements: [
-                        {
-                            type: "mrkdwn",
-                            text: `Abot leads you through the elegantly decorated hallway towards a grand sitting room. As you entered, you saw the host standing by the fireplace, a warm smile on their face.`
-                        },
-                    ]
-                },
-                {
-                    type: "divider"
+                    type: "section",
+                    text: {
+                        type: "mrkdwn",
+                        text: `Abot leads you through the elegantly decorated hallway towards a grand sitting room. As you entered, you saw the host standing by the fireplace, a warm smile on their face.`
+                    },
                 },
                 {
                     type: "section",
