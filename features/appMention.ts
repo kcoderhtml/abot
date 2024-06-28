@@ -37,6 +37,12 @@ const appMention = async (
                         check: true
                     };
                     break;
+                case /^hi/.test(command):
+                    message = {
+                        message: `hi <@${payload.user}>! what's up?`,
+                        check: true
+                    };
+                    break;
             }
         }
 
