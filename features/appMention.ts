@@ -13,8 +13,7 @@ const appMention = async (
         console.log(`👏 ${payload.user} mentioned me`);
 
         let message: { message: string, ephemeral?: boolean } = { message: `<@${payload.user}> if you want some help try asking my creator <@${process.env.CREATOR}>`, ephemeral: true };
-
-        if (payload.text) {
+        if (payload.text && payload.text.length > 0 && payload.user === process.env.CREATOR) {
             const command = payload.text.split(' ').slice(1).join(' ')
             switch (true) {
                 case /^ping$/.test(command):
@@ -36,6 +35,8 @@ const appMention = async (
                     };
                     break;
             }
+        } else if (payload.user !== process.env.CREATOR) {
+            message = { message: `*<@${payload.user}> don't be naughty only <@${process.env.CREATOR}> can do that*`, ephemeral: true };
         }
 
         if (message.ephemeral) {
