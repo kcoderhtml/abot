@@ -10,11 +10,11 @@ const appMention = async (
 ) => {
     // listen for new members joining the channel
     app.event('app_mention', async ({ context, payload }) => {
-        console.log(`👏 ${payload.user} mentioned me`);
+        const command = payload.text.split(' ').slice(1).join(' ')
+        console.log(`👏 ${payload.user} mentioned: ${command}`);
 
         let message: { message: string, ephemeral?: boolean, check?: boolean, thread?: boolean } = { message: `<@${payload.user}> if you want some help try asking my creator <@${process.env.CREATOR}>`, ephemeral: true };
         if (payload.text && payload.text.length > 0) {
-            const command = payload.text.split(' ').slice(1).join(' ')
             switch (true) {
                 case /^ping$/.test(command):
                     message = { message: `<@${payload.user}> pong!`, ephemeral: true, check: true };
