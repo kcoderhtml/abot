@@ -90,3 +90,6 @@ PING_GROUP_ID=S0123456789 # create a usergroup and add its id here
 ```bash
 bun run dev
 ```
+
+## License
+This project is licensed under the GNU AGPLv3. See the [LICENSE.md](LICENSE.md) file for details. 
