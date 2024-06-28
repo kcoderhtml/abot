@@ -40,7 +40,6 @@ const appMention = async (
                 case /^hi/.test(command):
                     message = {
                         message: `hi <@${payload.user}>! what's up?`,
-                        check: true
                     };
                     break;
             }
