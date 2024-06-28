@@ -23,7 +23,7 @@ const newMemberJoinHandlerP5 = async (
                     type: "section",
                     text: {
                         type: "mrkdwn",
-                        text: `Abot stepped into the room and addressed the host. _"Our esteemed guest ${payload.user.name} has arrived,"_ he announced with a respectful nod.`
+                        text: `Abot stepped into the room and addressed the host. _"Our esteemed guest <@${payload.user.id}> has arrived,"_ he announced with a respectful nod.`
                     },
                 }
             ]
