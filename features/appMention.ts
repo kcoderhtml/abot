@@ -22,7 +22,17 @@ const appMention = async (
                     break;
                 case /^ping @here/.test(command):
                     message = {
-                        message: `<!here>: *${command.replace(/^ping @here /, '')}*`
+                        message: `<!subteam^${process.env.PING_GROUP_ID}>: *${command.replace(/^ping @here /, '')}*`
+                    };
+                    break;
+                case /^ping @channel/.test(command):
+                    message = {
+                        message: `<!subteam^${process.env.PING_GROUP_ID}>: *${command.replace(/^ping @channel /, '')}*`
+                    };
+                    break;
+                case /^announce/.test(command):
+                    message = {
+                        message: `<!subteam^${process.env.PING_GROUP_ID}>: *${command.replace(/^announce /, '')}*`
                     };
                     break;
             }
