@@ -13,6 +13,9 @@ const newMemberJoinHandlerP3 = async (
     app.action('guest-book-signed', async ({ payload, context }) => {
         console.log(`🗝️  locking the guest book back up for ${payload.user.name}.`);
 
+        // get user's name
+        const name = (await app.client.users.profile.get({ user: payload.user.id })).profile?.display_name;
+
         const date = new Date();
         // edit a canvas
         await context.client.canvases.edit({
@@ -24,7 +27,7 @@ const newMemberJoinHandlerP3 = async (
                     document_content: {
                         type: "markdown",
                         // @ts-ignore - this is a bug in the library
-                        markdown: `:lower_left_fountain_pen: On ${date.getDate()}/${date.getMonth()}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()} with ${date.getSeconds()} seconds completed in the minute <@${payload.user.id}> wrote: _${payload.actions[0].value}_` //  markdown: 
+                        markdown: `:lower_left_fountain_pen: On ${date.getDate()}/${date.getMonth()}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()} with ${date.getSeconds()} seconds completed in the minute ${name} wrote: _${payload.actions[0].value}_` //  markdown: 
                     },
                 }
             ]
