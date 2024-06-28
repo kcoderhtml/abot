@@ -15,6 +15,7 @@ SLACK_SIGNING_SECRET=6af1126898c005bf5af676e7asdasdasd
 SLACK_BOT_TOKEN=xoxb-asdasdadsadsadsad
 SLACK_APP_TOKEN=xapp-0-adsadsadsadsadsad
 CHANNEL=your-channel-id
+CREATOR=your-user-id
 ```
 
 4. Run `bun dev` to start the server
