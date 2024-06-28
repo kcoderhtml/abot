@@ -39,7 +39,7 @@ const newMemberJoinHandlerP3 = async (
         });
 
         if (members.users!.find(user => user !== payload.user.id)) {
-            console.log(`📢  Adding ${payload.user.name} to the ping group.`);
+            console.log(`📢 Adding ${payload.user.name} to the ping group.`);
             // add user to the ping group
             await app.client.usergroups.users.update({
                 usergroup: process.env.PING_GROUP_ID!,
@@ -47,7 +47,7 @@ const newMemberJoinHandlerP3 = async (
                 users: members.users?.concat(payload.user.id)!,
             });
         } else {
-            console.log(`📢  ${payload.user.name} is already in the ping group.`);
+            console.log(`📢 ${payload.user.name} is already in the ping group.`);
         }
 
         // open the guest book
