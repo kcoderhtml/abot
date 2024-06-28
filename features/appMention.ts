@@ -12,16 +12,18 @@ const appMention = async (
     app.event('app_mention', async ({ context, payload }) => {
         console.log(`👏 ${payload.user} mentioned me`);
 
-        let message: { message: string, ephemeral?: boolean, ping?: boolean } = { message: `<@${payload.user}> if you want some help try asking my creator <@${process.env.CREATOR}>`, ephemeral: true };
+        let message: { message: string, ephemeral?: boolean } = { message: `<@${payload.user}> if you want some help try asking my creator <@${process.env.CREATOR}>`, ephemeral: true };
 
         if (payload.text) {
             const command = payload.text.split(' ').slice(1).join(' ')
-            switch (command) {
-                case 'ping':
+            switch (true) {
+                case /^ping$/.test(command):
                     message = { message: `<@${payload.user}> pong!`, ephemeral: true };
                     break;
-                case 'ping @here':
-                    message = { message: `<!here> pong!`, ping: true };
+                case /^ping @here/.test(command):
+                    message = {
+                        message: `<!here>: *${command.replace(/^ping @here /, '')}*`
+                    };
                     break;
             }
         }
@@ -36,8 +38,6 @@ const appMention = async (
             await context.client.chat.postMessage({
                 channel: payload.channel,
                 text: message.message,
-                thread_ts: message.ping ? payload.event_ts : undefined,
-                reply_broadcast: message.ping,
             });
         }
     });
