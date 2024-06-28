@@ -1,0 +1,19 @@
+name: scaffold
+services:
+  server:
+    ports:
+      - 4221:3000
+    image: kcoderhtml/scaffold-server:latest
+    restart: unless-stopped
+    environment:
+      - SLACK_SIGNING_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - SLACK_BOT_TOKEN=xoxb-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - SLACK_APP_TOKEN=xapp-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - CHANNEL=C0123456789 # copy your channel id
+      - CREATOR=U0123456789 # copy your user id
+      - CANVAS_ID=F123456789 # create a canvas that isn't a channel canvas and copu its id
+      - SLACK_BOT_ID=B0123456789 # copy the bot id from the app
+      - PING_GROUP_ID=S0123456789 # create a usergroup and add its id here
+    init: true
+    volumes:
+      - ./data:/usr/src/app/data
