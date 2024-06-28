@@ -15,26 +15,10 @@ async function welcomeNewMember(app: SlackApp<{
                 type: "context",
                 elements: [
                     {
-                        "type": "mrkdwn",
-                        "text": `'Ahem..' On behalf of <@${process.env.CREATOR}> I welcome you to <#${process.env.CHANNEL}>.`
-                    }
+                        type: "mrkdwn",
+                        text: `Abot stood at the entrance hall, his imposing figure slightly softened by the warm light filtering through the high windows. His eyes, a mixture of sternness and subtle kindness, met your gaze as you stepped inside.`
+                    },
                 ]
-            },
-            {
-                type: "divider"
-            },
-            {
-                type: "input",
-                dispatch_action: true,
-                element: {
-                    type: "plain_text_input",
-                    action_id: "plain_text_input-action"
-                },
-                label: {
-                    type: "plain_text",
-                    text: `Please sign <@${process.env.CREATOR}>'s guest book!`,
-                    emoji: true
-                }
             },
             {
                 type: "divider"
@@ -43,8 +27,40 @@ async function welcomeNewMember(app: SlackApp<{
                 type: "section",
                 text: {
                     type: "mrkdwn",
-                    text: `_Once your done push the book over to me and i'll notify <@${process.env.CREATOR}>!_`
+                    text: `\n\n_"Welcome,"_ he said, his voice carrying that distinctive blend of British and New Yorker accents. _"I'm Albert Thompson, but you can call me Abot. I look after the household."_`
                 }
+            },
+            {
+                type: "section",
+                text: {
+                    type: "mrkdwn",
+                    text: `\n\nYou nodded, feeling a mix of awe and reassurance at his presence.`
+                }
+            },
+            {
+                type: "section",
+                text: {
+                    type: "mrkdwn",
+                    text: `\n\n_"If you don't mind,"_ Abot continued, _"I would appreciate it if you could sign the guest book. It's for my and the master's records."_`
+                }
+            },
+            {
+                type: "divider"
+            },
+            {
+                type: "actions",
+                elements: [
+                    {
+                        type: "button",
+                        text: {
+                            type: "plain_text",
+                            text: "Step up to the guest :book:",
+                            emoji: true
+                        },
+                        value: "sign-guest-book",
+                        action_id: "sign-guest-book"
+                    }
+                ]
             }
         ]
 
