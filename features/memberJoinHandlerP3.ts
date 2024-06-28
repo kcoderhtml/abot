@@ -24,7 +24,7 @@ const newMemberJoinHandlerP3 = async (
                     document_content: {
                         type: "markdown",
                         // @ts-ignore - this is a bug in the library
-                        markdown: `:lower_left_fountain_pen: On ${date.getDate()}/${date.getMonth()}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()} with ${date.getSeconds()} seconds completed in the minute @${payload.user.name} wrote: _${payload.actions[0].value}_` //  markdown: 
+                        markdown: `:lower_left_fountain_pen: On ${date.getDate()}/${date.getMonth()}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()} with ${date.getSeconds()} seconds completed in the minute <@${payload.user.id}> wrote: _${payload.actions[0].value}_` //  markdown: 
                     },
                 }
             ]
