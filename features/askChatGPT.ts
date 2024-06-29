@@ -30,7 +30,7 @@ export async function askChatGPT(question: string, channel: string, user: string
     const startTime = Bun.nanoseconds();
     const orignalMessage = await app.client.chat.postMessage({
         channel,
-        text: `<@${user}> asked me: _"${question}"_ and I'm thinking :loading-dots:`
+        text: `<@${user}> asked me: _"${question}"_ and I'm thinking :loading-dots: :dino_waah:`
     });
 
     let count = 0;
