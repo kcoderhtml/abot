@@ -26,6 +26,7 @@ async function getChatGPT(question: string, channel: string, user: string, app: 
     SLACK_APP_TOKEN: string;
     SLACK_LOGGING_LEVEL: any;
 }>) {
+    const startTime = Bun.nanoseconds();
     const orignalMessage = await app.client.chat.postMessage({
         channel,
         text: `<@${user}> asked me: _"${question}"_ and I'm thinking :loading-dots:`
@@ -108,6 +109,18 @@ async function getChatGPT(question: string, channel: string, user: string, app: 
                                 }
                             }
                         ]
+                    }
+                ]
+            },
+            {
+                type: "divider"
+            },
+            {
+                type: "context",
+                elements: [
+                    {
+                        type: "mrkdwn",
+                        text: `Query took ${(Bun.nanoseconds() - startTime) / 1000000} milliseconds to complete.`
                     }
                 ]
             }
