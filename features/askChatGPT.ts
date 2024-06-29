@@ -60,6 +60,47 @@ export async function askChatGPT(question: string, channel: string, user: string
     const userDossier = await getUserDossier(user, app);
     const thisPrompt = prompt();
 
+    // ensure that the users question is not too long
+    if (question.length > 1000) {
+        await app.client.chat.update({
+            channel,
+            ts: orignalMessage.ts!,
+            text: `<@${user}> asked me: _"${question.split("").slice(0, 100).join("")}"_ bbbbuuuuttt :dino_waah: but I'm sooo  sorrrwwy, I can't answer long questions, i';m juts a dino :sob:`,
+            blocks: [
+                {
+                    type: "context",
+                    elements: [
+                        {
+                            type: "mrkdwn",
+                            text: `<@${user}> asked me: _"${question.split("").slice(0, 100).join("")}"_ bbbbuuuuttt :dino_waah: but I'm sooo  sorrrwwy, I can't answer long questions, i';m juts a dino :sob:`,
+                        }
+                    ]
+                },
+                {
+                    type: "divider"
+                },
+                {
+                    type: "image",
+                    image_url: "https://rawr.hackclub.com/confused%20dino.jpg",
+                    alt_text: "sorry, i'm just a dino"
+                },
+                {
+                    type: "divider"
+                },
+                {
+                    type: "context",
+                    elements: [
+                        {
+                            type: "mrkdwn",
+                            text: `Query took ${Math.round((Bun.nanoseconds() - startTime) / 100000) / 10000} seconds to complete.`
+                        }
+                    ]
+                }
+            ],
+        });
+        return;
+    }
+
     let count = 0;
     const result = await chatGPT.sendMessage(`---\n${userDossier}\n---\n\nquestion > ${question}`, {
         onProgress: async () => {
@@ -194,6 +235,47 @@ const threadedChatGPT = async (
                     slice(-10)
 
                 const question = thread.messages[thread.messages.length - 1];
+
+                // ensure that the users question is not too long
+                if (question.text!.length > 1000) {
+                    await app.client.chat.postMessage({
+                        channel: payload.channel,
+                        thread_ts: question.thread_ts!,
+                        text: `:dino_confused: but I'm sorry, I can't answer long questions, i';m juts a dino :sob:`,
+                        blocks: [
+                            {
+                                type: "context",
+                                elements: [
+                                    {
+                                        type: "mrkdwn",
+                                        text: `:dino_confused: but I'm sorry, I can't answer long questions, i';m juts a dino :sob:`,
+                                    }
+                                ]
+                            },
+                            {
+                                type: "divider"
+                            },
+                            {
+                                type: "image",
+                                image_url: "https://rawr.hackclub.com/confused%20dino.jpg",
+                                alt_text: "sorry, i'm just a dino"
+                            },
+                            {
+                                type: "divider"
+                            },
+                            {
+                                type: "context",
+                                elements: [
+                                    {
+                                        type: "mrkdwn",
+                                        text: `Query took ${Math.round((Bun.nanoseconds() - startTime) / 100000) / 10000} seconds to complete.`
+                                    }
+                                ]
+                            }
+                        ],
+                    });
+                    return;
+                }
 
                 const orignalMessage = await app.client.chat.postMessage({
                     channel: payload.channel,
