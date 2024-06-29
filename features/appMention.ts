@@ -56,7 +56,11 @@ const appMention = async (
                     return
                 // catch all
                 default:
-                    await askChatGPT(command, payload.channel, payload.user!, app);
+                    // if the message is a threaded message, don't ask ChatGPT
+                    if (!payload.thread_ts) {
+                        await askChatGPT(command, payload.channel, payload.user!, app);
+                        return
+                    }
                     return
             }
         }
