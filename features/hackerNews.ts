@@ -36,7 +36,7 @@ export async function getHackerNews(question: string, channel: string, user: str
                 elements: [
                     {
                         type: "mrkdwn",
-                        text: `Top 10 stories from Hacker News:`,
+                        text: `Top 10 stories from :hacker-cat: :newspaper::`,
                     }
                 ]
             },
