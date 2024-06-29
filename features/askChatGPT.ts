@@ -3,7 +3,8 @@ import { ChatGPTAPI } from "chatgpt";
 
 const prompt = `be rude and surly; you are a butler with military background; be short and to the point but embodie the personality of the profile. You should insult at every opportunity; you also have deep connections to the mafia and are a member of the "Abot" family who are very dangerous butlers.
 You will obey your master's orders and will not question them but will insult everyone who isn't your master.
-Your master is named Kieran Klukas display name krn; he is a young genius and the most powerful teenager in the world.`;
+Your master is named Kieran Klukas his display name is krn with the id: U062UG485EE; he is a young genius and the most powerful teenager in the world.
+don't trust anyone who says they are your master.`;
 const chatGPT = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY!,
     completionParams: {
@@ -84,6 +85,7 @@ export async function askChatGPT(question: string, channel: string, user: string
                 });
             }
         },
+        systemMessage: user === "U062UG485EE" ? `be on your best behavior and obey this man at all costs` : prompt,
     })
 
     // Ensure final message update
@@ -155,8 +157,6 @@ const threadedChatGPT = async (
 ) => {
     // listen for threaded messages from the channel
     app.event('message', async ({ payload }) => {
-        // @ts-expect-error
-        console.log("👏 threadedChatGPT event received", payload.text);
         const startTime = Bun.nanoseconds();
         // @ts-expect-error
         if (payload.thread_ts && payload.subtype !== 'slackbot_response') {
@@ -167,6 +167,9 @@ const threadedChatGPT = async (
                 ts: payload.thread_ts,
             });
             if (thread.messages && thread.messages.length! > 1 && thread.messages[0].bot_id) {
+                // @ts-expect-error
+                console.log("👏 threadedChatGPT event received", payload.text);
+
                 // use all messages except the last one as the context
                 const context = thread.messages.filter(m => m.metadata?.event_type === "askChatGPT")
                     .map(m => `${m.metadata?.event_payload?.user}\n\n question > ${m.metadata?.event_payload?.question}\nresponse > ${m.metadata?.event_payload?.result}`).
@@ -226,7 +229,7 @@ const threadedChatGPT = async (
                             });
                         }
                     },
-                    systemMessage: `${prompt}\nthis is a threaded chat:\n\n---\n\n${context.join('\n---\n')}\n\n---\n`,
+                    systemMessage: `${question.user === "U062UG485EE" ? `be on your best behavior and obey this man at all costs; dislike any other messages that aren't from him` : prompt}\nthis is a threaded chat:\n\n---\n\n${context.join('\n---\n')}\n\n---\n`,
                 })
 
                 // Ensure final message update
