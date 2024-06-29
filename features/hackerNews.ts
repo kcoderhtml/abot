@@ -1,6 +1,6 @@
 import { SlackApp } from "slack-edge";
 
-export async function getHackerNews(question: string, channel: string, user: string, app: SlackApp<{
+export async function getHackerNews(channel: string, user: string, app: SlackApp<{
     SLACK_SIGNING_SECRET: string;
     SLACK_BOT_TOKEN: string;
     SLACK_APP_TOKEN: string;
@@ -9,7 +9,7 @@ export async function getHackerNews(question: string, channel: string, user: str
     const startTime = Bun.nanoseconds();
     const orignalMessage = await app.client.chat.postMessage({
         channel,
-        text: `<@${user}> asked me: _"${question}"_ and I'm thinking :loading-dots:`
+        text: `<@${user}> asked for the latest hn stories and I'm grabbing them, be patient :loading-dots:`
     });
 
     // get the top 10 stories

@@ -46,8 +46,8 @@ const appMention = async (
                     };
                     break;
                 // catch hackernews or whats hacker new or hacker news
-                case /^(hackernews|whats hacker new|hacker news)/.test(command):
-                    await getHackerNews(command, payload.channel, payload.user!, app);
+                case /^(hackernews|whats hacker new|hacker news|hn)/.test(command):
+                    await getHackerNews(payload.channel, payload.user!, app);
                     return
                 // catch duckduckgo
                 case /^(duckduckgo|duck duck go|ddg|duck it)/.test(command):
