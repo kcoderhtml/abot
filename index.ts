@@ -20,7 +20,9 @@ const app = new SlackApp({
 console.log(`⚒️  Loading ${Object.entries(features).length} features...`);
 for (const [feature, handler] of Object.entries(features)) {
     console.log(`📦 ${feature} loaded`);
-    handler(app);
+    if (typeof handler === "function") {
+        handler(app);
+    }
 }
 
 export default {
