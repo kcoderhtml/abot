@@ -1,5 +1,6 @@
 import { SlackApp } from "slack-edge";
 import { askChatGPT } from "./askChatGPT";
+import { getHackerNews } from "./hackerNews";
 
 const appMention = async (
     app: SlackApp<{
@@ -43,6 +44,10 @@ const appMention = async (
                         message: `hi <@${payload.user}>! what's up?`,
                     };
                     break;
+                // catch hackernews or whats hacker new or hacker news
+                case /^(hackernews|whats hacker new|hacker news)/.test(command):
+                    await getHackerNews(command, payload.channel, payload.user!, app);
+                    return
                 // catch all
                 default:
                     await askChatGPT(command, payload.channel, payload.user!, app);

@@ -1,0 +1,69 @@
+import { SlackApp } from "slack-edge";
+
+export async function getHackerNews(question: string, channel: string, user: string, app: SlackApp<{
+    SLACK_SIGNING_SECRET: string;
+    SLACK_BOT_TOKEN: string;
+    SLACK_APP_TOKEN: string;
+    SLACK_LOGGING_LEVEL: any;
+}>) {
+    const startTime = Bun.nanoseconds();
+    const orignalMessage = await app.client.chat.postMessage({
+        channel,
+        text: `<@${user}> asked me: _"${question}"_ and I'm thinking :loading-dots:`
+    });
+
+    // get the top 10 stories
+    const topStories = await fetch(`https://hacker-news.firebaseio.com/v0/topstories.json`)
+        .then(res => res.json())
+        .then(res => res.slice(0, 10));
+
+    // get the top stories
+    const topStoriesText = await Promise.all(topStories.map(async (storyId: string) => {
+        const story = await fetch(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`)
+            .then(res => res.json());
+
+        return `\n\n> _ ${story.title} - ${story.url} _`;
+    })) as string[];
+
+    // Ensure final message update
+    await app.client.chat.update({
+        channel,
+        ts: orignalMessage.ts!,
+        text: `Top 10 stories from Hacker News: ${topStoriesText.join("\n")}`,
+        blocks: [
+            {
+                type: "context",
+                elements: [
+                    {
+                        type: "mrkdwn",
+                        text: `Top 10 stories from Hacker News:`,
+                    }
+                ]
+            },
+            {
+                type: "divider"
+            },
+            {
+                type: "section",
+                text: {
+                    type: "mrkdwn",
+                    text: topStoriesText.join("\n"),
+                },
+            },
+            {
+                type: "divider"
+            },
+            {
+                type: "context",
+                elements: [
+                    {
+                        type: "mrkdwn",
+                        text: `Query took ${(Bun.nanoseconds() - startTime) / 1000000} milliseconds to complete.`
+                    }
+                ]
+            }
+        ],
+    });
+}
+
+export default "hackerNews";
