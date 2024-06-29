@@ -1,9 +1,9 @@
-name: scaffold
+name: abot
 services:
   server:
     ports:
       - 4221:3000
-    image: kcoderhtml/scaffold-server:latest
+    image: kcoderhtml/abot:latest
     restart: unless-stopped
     environment:
       - SLACK_SIGNING_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -14,6 +14,5 @@ services:
       - CANVAS_ID=F123456789 # create a canvas that isn't a channel canvas and copu its id
       - SLACK_BOT_ID=B0123456789 # copy the bot id from the app
       - PING_GROUP_ID=S0123456789 # create a usergroup and add its id here
+      - OPENAI_API_KEY=sk-abot-dddddddddddddddddddddddddddddddd
     init: true
-    volumes:
-      - ./data:/usr/src/app/data
