@@ -174,7 +174,7 @@ const threadedChatGPT = async (
                 // @ts-expect-error
                 ts: payload.thread_ts,
             });
-            if (thread.messages && thread.messages.length! > 1) {
+            if (thread.messages && thread.messages.length! > 1 && thread.messages[0].bot_id) {
                 // use all messages except the last one as the context
                 const context = thread.messages.filter(m => m.metadata?.event_type === "askChatGPT")
                     .map(m => `${m.metadata?.event_payload?.user}\n\n question > ${m.metadata?.event_payload?.question}\nresponse > ${m.metadata?.event_payload?.result}`).
