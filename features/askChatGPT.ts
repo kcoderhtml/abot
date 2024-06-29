@@ -22,6 +22,19 @@ const chatGPT = new ChatGPTAPI({
     systemMessage: prompt,
 });
 
+async function getUserDossier(user: string, app: SlackApp<{
+    SLACK_SIGNING_SECRET: string;
+    SLACK_BOT_TOKEN: string;
+    SLACK_APP_TOKEN: string;
+    SLACK_LOGGING_LEVEL: any;
+}>) {
+    const userInfo = await app.client.users.info({
+        user: user,
+    });
+
+    return `Real Name: ${userInfo.user?.real_name}, Title: ${userInfo.user?.profile?.title}, Display Name: ${userInfo.user?.profile?.display_name_normalized}`
+}
+
 export async function askChatGPT(question: string, channel: string, user: string, app: SlackApp<{
     SLACK_SIGNING_SECRET: string;
     SLACK_BOT_TOKEN: string;
@@ -34,8 +47,10 @@ export async function askChatGPT(question: string, channel: string, user: string
         text: `<@${user}> asked me: _"${question}"_ and I'm thinking :loading-dots: :dino_waah:`
     });
 
+    const userDossier = await getUserDossier(user, app);
+
     let count = 0;
-    const result = await chatGPT.sendMessage(question, {
+    const result = await chatGPT.sendMessage(`${userDossier}\nquestion > ${question}`, {
         onProgress: async () => {
             count++;
             if (count % 30 === 0) {
@@ -127,6 +142,14 @@ export async function askChatGPT(question: string, channel: string, user: string
                 ]
             }
         ],
+        metadata: {
+            event_type: "askChatGPT",
+            event_payload: {
+                user: userDossier,
+                question: question,
+                result: result.text,
+            }
+        }
     });
 }
 
@@ -147,14 +170,19 @@ const threadedChatGPT = async (
             console.log("👏 message_replied event received");
             const thread = await app.client.conversations.replies({
                 channel: payload.channel,
+                include_all_metadata: true,
                 // @ts-expect-error
                 ts: payload.thread_ts,
             });
             if (thread.messages && thread.messages.length! > 1) {
                 // use all messages except the last one as the context
-                const context = thread.messages.slice(0, -1).map(m => m.text?.replace("your result is (via Dino GPT): ", ''));
+                const context = thread.messages.filter(m => m.metadata?.event_type === "askChatGPT")
+                    .map(m => `${m.metadata?.event_payload?.user}\n\n question > ${m.metadata?.event_payload?.question}\nresponse > ${m.metadata?.event_payload?.result}`).
+                    slice(-10)
 
-                const question = thread.messages[thread.messages.length - 1].text;
+                console.log(thread.messages.filter(m => m.metadata?.event_type !== "askChatGPT"));
+                const question = thread.messages[thread.messages.length - 1];
+
                 const orignalMessage = await app.client.chat.postMessage({
                     channel: payload.channel,
                     // @ts-expect-error
@@ -164,8 +192,10 @@ const threadedChatGPT = async (
 
                 console.log(context);
 
+                const userDossier = await getUserDossier(question.user!, app);
+
                 let count = 0;
-                const result = await chatGPT.sendMessage(question!, {
+                const result = await chatGPT.sendMessage(`${userDossier} >\n${question.text!}`, {
                     onProgress: async () => {
                         count++;
                         if (count % 30 === 0) {
@@ -258,6 +288,14 @@ const threadedChatGPT = async (
                             ]
                         }
                     ],
+                    metadata: {
+                        event_type: "askChatGPT",
+                        event_payload: {
+                            user: userDossier,
+                            question: question.text!,
+                            result: result.text,
+                        }
+                    }
                 });
             }
         }
