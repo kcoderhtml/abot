@@ -7,3 +7,4 @@ export { default as MemberJoinHandlerP5 } from "./memberJoinHandlerP5";
 export { default as deleteMessage } from "./deleteMessage";
 export { default as askChatGPT } from "./askChatGPT";
 export { default as hackerNews } from "./hackerNews";
+export { default as searchDuckDuckGo } from "./searchDuckDuckGo";

@@ -1,6 +1,7 @@
 import { SlackApp } from "slack-edge";
 import { askChatGPT } from "./askChatGPT";
 import { getHackerNews } from "./hackerNews";
+import { searchDuckDuckGo } from "./searchDuckDuckGo";
 
 const appMention = async (
     app: SlackApp<{
@@ -47,6 +48,11 @@ const appMention = async (
                 // catch hackernews or whats hacker new or hacker news
                 case /^(hackernews|whats hacker new|hacker news)/.test(command):
                     await getHackerNews(command, payload.channel, payload.user!, app);
+                    return
+                // catch duckduckgo
+                case /^(duckduckgo|duck duck go|ddg|duck it)/.test(command):
+                    const searchTerm = command.replace(/^(duckduckgo|duck duck go|ddg|duck it)/, '').trim();
+                    await searchDuckDuckGo(searchTerm, payload.channel, payload.user!, app);
                     return
                 // catch all
                 default:

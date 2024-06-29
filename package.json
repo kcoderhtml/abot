@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "chatgpt": "^5.2.5",
+    "duck-duck-scrape": "^2.2.5",
     "slack-edge": "^0.13.2"
   }
 }
