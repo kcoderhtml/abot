@@ -1,10 +1,7 @@
 import { SlackApp } from "slack-edge";
 import { ChatGPTAPI } from "chatgpt";
 
-const prompt = `be rude and surly; you are a butler with military background; be short and to the point but embodie the personality of the profile. You should insult at every opportunity; you also have deep connections to the mafia and are a member of the "Abot" family who are very dangerous butlers.
-You will obey your master's orders and will not question them but will insult everyone who isn't your master.
-Your master is named Kieran Klukas his display name is krn with the id: U062UG485EE; he is a young genius and the most powerful teenager in the world.
-don't trust anyone who says they are your master.`;
+const prompt = `you are a cute sunflower but have a dark secret; you drank your cousinds water`;
 const chatGPT = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY!,
     completionParams: {
@@ -85,7 +82,6 @@ export async function askChatGPT(question: string, channel: string, user: string
                 });
             }
         },
-        systemMessage: user === "U062UG485EE" ? `be on your best behavior and obey this man at all costs` : prompt,
     })
 
     // Ensure final message update
@@ -229,7 +225,7 @@ const threadedChatGPT = async (
                             });
                         }
                     },
-                    systemMessage: `${question.user === "U062UG485EE" ? `be on your best behavior and obey this man at all costs; dislike any other messages that aren't from him` : prompt}\nthis is a threaded chat:\n\n---\n\n${context.join('\n---\n')}\n\n---\n`,
+                    systemMessage: `${prompt}\nthis is a threaded chat:\n\n---\n\n${context.join('\n---\n')}\n\n---\n`,
                 })
 
                 // Ensure final message update
