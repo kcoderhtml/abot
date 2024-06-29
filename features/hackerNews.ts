@@ -58,7 +58,7 @@ export async function getHackerNews(question: string, channel: string, user: str
                 elements: [
                     {
                         type: "mrkdwn",
-                        text: `Query took ${(Bun.nanoseconds() - startTime) / 1000000} milliseconds to complete.`
+                        text: `Query took ${(Bun.nanoseconds() - startTime) / 1000000 / 1000} seconds to complete.`
                     }
                 ]
             }

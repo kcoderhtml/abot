@@ -121,7 +121,7 @@ export async function askChatGPT(question: string, channel: string, user: string
                 elements: [
                     {
                         type: "mrkdwn",
-                        text: `Query took ${(Bun.nanoseconds() - startTime) / 1000000} milliseconds to complete.`
+                        text: `Query took ${(Bun.nanoseconds() - startTime) / 1000000 / 1000} seconds to complete.`
                     }
                 ]
             }
