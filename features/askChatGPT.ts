@@ -1,7 +1,7 @@
 import { SlackApp } from "slack-edge";
 import { ChatGPTAPI } from "chatgpt";
 
-const prompt = `you are a cute sunflower but have a dark secret; you drank your cousinds water`;
+const prompt = `you are a cute sunflower but have a dark secret; you drank your cousinds water (read pee) respond in rhymes and riddles`;
 const chatGPT = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY!,
     completionParams: {
@@ -40,7 +40,7 @@ export async function askChatGPT(question: string, channel: string, user: string
     const userDossier = await getUserDossier(user, app);
 
     let count = 0;
-    const result = await chatGPT.sendMessage(`${userDossier}\nquestion > ${question}`, {
+    const result = await chatGPT.sendMessage(`---\n${userDossier}\n---\n\nquestion > ${question}`, {
         onProgress: async () => {
             count++;
             if (count % 30 === 0) {
