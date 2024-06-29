@@ -82,14 +82,14 @@ export async function askChatGPT(question: string, channel: string, user: string
     await app.client.chat.update({
         channel,
         ts: orignalMessage.ts!,
-        text: `<@${user}> asked me: _"${question}"_ and the answer is: ${result.text}`,
+        text: `<@${user}> asked me: _"${question}"_ and the answer is (via Dino GPT): ${result.text}`,
         blocks: [
             {
                 type: "context",
                 elements: [
                     {
                         type: "mrkdwn",
-                        text: `<@${user}> asked me: _"${question}"_ and the answer is:`,
+                        text: `<@${user}> asked me: _"${question}"_ and the answer is (via :dino-gpt:):`,
                     }
                 ]
             },
