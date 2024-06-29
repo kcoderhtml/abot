@@ -180,7 +180,6 @@ const threadedChatGPT = async (
                     .map(m => `${m.metadata?.event_payload?.user}\n\n question > ${m.metadata?.event_payload?.question}\nresponse > ${m.metadata?.event_payload?.result}`).
                     slice(-10)
 
-                console.log(thread.messages.filter(m => m.metadata?.event_type !== "askChatGPT"));
                 const question = thread.messages[thread.messages.length - 1];
 
                 const orignalMessage = await app.client.chat.postMessage({
@@ -189,8 +188,6 @@ const threadedChatGPT = async (
                     thread_ts: payload.thread_ts,
                     text: `:loading-dots: thinking... :dino_confused:`
                 });
-
-                console.log(context);
 
                 const userDossier = await getUserDossier(question.user!, app);
 
