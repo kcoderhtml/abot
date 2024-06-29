@@ -52,7 +52,7 @@ export async function searchDuckDuckGo(question: string, channel: string, user: 
                 elements: [
                     {
                         type: "mrkdwn",
-                        text: `Query took ${(Bun.nanoseconds() - startTime) / 1000000 / 1000} seconds to complete.`
+                        text: `Query took ${Math.round((Bun.nanoseconds() - startTime) / 100000) / 10000} seconds to complete.`
                     }
                 ]
             }
