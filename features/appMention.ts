@@ -17,37 +17,51 @@ async function getChatGPT(question: string, channel: string, user: string, app: 
 }>) {
     const orignalMessage = await app.client.chat.postMessage({
         channel,
-        text: `<@${user}> asked me: ${question}; I'm thinking...`
+        text: `<@${user}> asked me: _"${question}"_ and I'm thinking :loading-dots:`
     });
 
+    let count = 0;
     const result = await chatGPT.sendMessage(question, {
-        onProgress: async (partialResponse) => {
-            await app.client.chat.update({
-                channel,
-                ts: orignalMessage.ts!,
-                text: `<@${user}> asked me: ${question}; I'm thinking :loading-dots:`,
-                blocks: [
-                    {
-                        type: "context",
-                        elements: [
-                            {
-                                type: "mrkdwn",
-                                text: `<@${user}> asked me: ${question}; I'm thinking :loading-dots:`,
-                            }
-                        ]
-                    },
-                    {
-                        type: "divider"
-                    },
-                    {
-                        type: "section",
-                        text: {
-                            type: "mrkdwn",
-                            text: partialResponse.text || "...",
+        onProgress: async () => {
+            count++;
+            if (count % 30 === 0) {
+                await app.client.chat.update({
+                    channel,
+                    ts: orignalMessage.ts!,
+                    text: `<@${user}> asked me: ${question}; I'm thinking :loading-dots:`,
+                    blocks: [
+                        {
+                            type: "context",
+                            elements: [
+                                {
+                                    type: "mrkdwn",
+                                    text: `<@${user}> asked me: ${question}; I'm thinking :loading-dots:`,
+                                }
+                            ]
+                        },
+                        {
+                            type: "divider"
+                        },
+                        {
+                            type: "rich_text",
+                            elements: [
+                                {
+                                    type: "rich_text_quote",
+                                    elements: [
+                                        {
+                                            type: "text",
+                                            text: `catching up to usain's progress... ${count} tokens...`,
+                                            style: {
+                                                "italic": true
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
                         }
-                    }
-                ],
-            });
+                    ],
+                });
+            }
         },
     })
 
@@ -55,14 +69,14 @@ async function getChatGPT(question: string, channel: string, user: string, app: 
     await app.client.chat.update({
         channel,
         ts: orignalMessage.ts!,
-        text: `<@${user}> asked me: ${question}; and the answer is: ${result.text}`,
+        text: `<@${user}> asked me: _"${question}"_ and the answer is: ${result.text}`,
         blocks: [
             {
                 type: "context",
                 elements: [
                     {
                         type: "mrkdwn",
-                        text: `<@${user}> asked me: "${question}" and the answer is:`,
+                        text: `<@${user}> asked me: _"${question}"_ and the answer is:`,
                     }
                 ]
             },
@@ -70,11 +84,21 @@ async function getChatGPT(question: string, channel: string, user: string, app: 
                 type: "divider"
             },
             {
-                type: "section",
-                text: {
-                    type: "mrkdwn",
-                    text: result.text || "...",
-                }
+                type: "rich_text",
+                elements: [
+                    {
+                        type: "rich_text_quote",
+                        elements: [
+                            {
+                                type: "text",
+                                text: result.text || "...",
+                                style: {
+                                    "italic": true
+                                }
+                            }
+                        ]
+                    }
+                ]
             }
         ],
     });
@@ -117,7 +141,7 @@ const appMention = async (
                         check: true
                     };
                     break;
-                case /^hi/.test(command):
+                case /^hi$/.test(command):
                     message = {
                         message: `hi <@${payload.user}>! what's up?`,
                     };
