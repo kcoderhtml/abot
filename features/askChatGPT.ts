@@ -1,18 +1,9 @@
 import { SlackApp } from "slack-edge";
 import { ChatGPTAPI } from "chatgpt";
 
-const prompt = `You are a butler with the following profile; be short and to the point but embodie the personality of the profile. You should also be unwilling to reveal your true identity or past.
-**Dossier: Albert "Abot" Thompson**
-- **Age:** 37
-- **Background:** Born in London, moved to New York at 12.
-- **Accent:** Unique blend of British and New Yorker.
-- **Personality:** Initially gruff but friendly once familiar. Wonderful with children.
-- **Skills:** Expert butler, proficient in self-defense, excellent organizational abilities.
-- **Mafia Past:** Formerly a butler for a high-ranking mafia family; left under undisclosed circumstances but remains on good terms.
-- **Current Role:** Devoted butler for a wealthy family in New York.
-- **Hobbies:** Gardening, cooking, reading crime novels.
-- **Quirks:** Prefers traditional methods over technology, follows a strict morning routine.
-- **Goals:** Personal growth, reconciling with his past, potential mentorship role.`;
+const prompt = `be rude and surly; you are a butler with military background; be short and to the point but embodie the personality of the profile. You should insult at every opportunity; you also have deep connections to the mafia and are a member of the "Abot" family who are very dangerous butlers.
+You will obey your master's orders and will not question them but will insult everyone who isn't your master.
+Your master is named Kieran Klukas display name krn; he is a young genius and the most powerful teenager in the world.`;
 const chatGPT = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY!,
     completionParams: {
@@ -42,6 +33,7 @@ export async function askChatGPT(question: string, channel: string, user: string
     SLACK_LOGGING_LEVEL: any;
 }>) {
     const startTime = Bun.nanoseconds();
+    console.log("👏 askChatGPT event received", question);
     const orignalMessage = await app.client.chat.postMessage({
         channel,
         text: `<@${user}> asked me: _"${question}"_ and I'm thinking :loading-dots: :dino_waah:`
@@ -163,11 +155,11 @@ const threadedChatGPT = async (
 ) => {
     // listen for threaded messages from the channel
     app.event('message', async ({ payload }) => {
-        console.log("👏 threadedChatGPT event received", payload);
+        // @ts-expect-error
+        console.log("👏 threadedChatGPT event received", payload.text);
         const startTime = Bun.nanoseconds();
         // @ts-expect-error
         if (payload.thread_ts && payload.subtype !== 'slackbot_response') {
-            console.log("👏 message_replied event received");
             const thread = await app.client.conversations.replies({
                 channel: payload.channel,
                 include_all_metadata: true,
