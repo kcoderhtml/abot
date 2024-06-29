@@ -1,4 +1,84 @@
 import { SlackApp } from "slack-edge";
+import { ChatGPTAPI } from "chatgpt";
+
+const chatGPT = new ChatGPTAPI({
+    apiKey: process.env.OPENAI_API_KEY!,
+    completionParams: {
+        model: 'gpt-3.5-turbo',
+        max_tokens: 1000,
+    },
+});
+
+async function getChatGPT(question: string, channel: string, user: string, app: SlackApp<{
+    SLACK_SIGNING_SECRET: string;
+    SLACK_BOT_TOKEN: string;
+    SLACK_APP_TOKEN: string;
+    SLACK_LOGGING_LEVEL: any;
+}>) {
+    const orignalMessage = await app.client.chat.postMessage({
+        channel,
+        text: `<@${user}> asked me: ${question}; I'm thinking...`
+    });
+
+    const result = await chatGPT.sendMessage(question, {
+        onProgress: async (partialResponse) => {
+            await app.client.chat.update({
+                channel,
+                ts: orignalMessage.ts!,
+                text: `<@${user}> asked me: ${question}; I'm thinking :loading-dots:`,
+                blocks: [
+                    {
+                        type: "context",
+                        elements: [
+                            {
+                                type: "mrkdwn",
+                                text: `<@${user}> asked me: ${question}; I'm thinking :loading-dots:`,
+                            }
+                        ]
+                    },
+                    {
+                        type: "divider"
+                    },
+                    {
+                        type: "section",
+                        text: {
+                            type: "mrkdwn",
+                            text: partialResponse.text || "...",
+                        }
+                    }
+                ],
+            });
+        },
+    })
+
+    // Ensure final message update
+    await app.client.chat.update({
+        channel,
+        ts: orignalMessage.ts!,
+        text: `<@${user}> asked me: ${question}; and the answer is: ${result.text}`,
+        blocks: [
+            {
+                type: "context",
+                elements: [
+                    {
+                        type: "mrkdwn",
+                        text: `<@${user}> asked me: "${question}" and the answer is:`,
+                    }
+                ]
+            },
+            {
+                type: "divider"
+            },
+            {
+                type: "section",
+                text: {
+                    type: "mrkdwn",
+                    text: result.text || "...",
+                }
+            }
+        ],
+    });
+}
 
 const appMention = async (
     app: SlackApp<{
@@ -42,6 +122,10 @@ const appMention = async (
                         message: `hi <@${payload.user}>! what's up?`,
                     };
                     break;
+                // catch all
+                default:
+                    await getChatGPT(command, payload.channel, payload.user!, app);
+                    return
             }
         }
 
