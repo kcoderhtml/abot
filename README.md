@@ -1,6 +1,6 @@
 # Abot - The maybe mafia affliated butler
 
-![Abot](.github/images/abot.jpeg)
+![](.github/images/abot.jpeg)
 
 This is a simple slack bot that sends a welcome message to new users when they join a channel.
 
