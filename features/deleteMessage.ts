@@ -1,16 +1,16 @@
-import { SlackApp } from "slack-edge";
+import { SlackApp } from 'slack-edge'
 
 const deleteMessage = async (
     app: SlackApp<{
-        SLACK_SIGNING_SECRET: string;
-        SLACK_BOT_TOKEN: string;
-        SLACK_APP_TOKEN: string;
-        SLACK_LOGGING_LEVEL: any;
+        SLACK_SIGNING_SECRET: string
+        SLACK_BOT_TOKEN: string
+        SLACK_APP_TOKEN: string
+        SLACK_LOGGING_LEVEL: any
     }>
 ) => {
     app.shortcut(
-        "delete_message",
-        async () => { },
+        'delete_message',
+        async () => {},
         async ({ context, payload }) => {
             // check if the thread is authored by this bot
             // @ts-expect-error - this is a bug in the library
@@ -21,10 +21,12 @@ const deleteMessage = async (
                     channel: payload.channel.id,
                     // @ts-expect-error - this is a bug in the library
                     ts: payload.message.ts,
-                });
+                })
 
                 // @ts-expect-error - this is a bug in the library
-                console.log(`🗑️  Deleting message ${payload.message.ts}${thread.messages!.length > 0 ? ` and ${thread.messages!.length - 1} other messages` : ""} in ${payload.channel.id}`);
+                console.log(
+                    `🗑️  Deleting message ${payload.message.ts}${thread.messages!.length > 0 ? ` and ${thread.messages!.length - 1} other messages` : ''} in ${payload.channel.id}`
+                )
 
                 for (const message of thread.messages!) {
                     // check if the message is from the bot
@@ -34,12 +36,12 @@ const deleteMessage = async (
                             channel: payload.channel.id,
                             // @ts-expect-error - this is a bug in the library
                             ts: message.ts,
-                        });
+                        })
                     }
                 }
             }
         }
-    );
-};
+    )
+}
 
-export default deleteMessage;
+export default deleteMessage
