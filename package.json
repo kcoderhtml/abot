@@ -1,6 +1,6 @@
 {
-    "name": "slack-welcome-bot",
-    "version": "0.2.2",
+    "name": "abot",
+    "version": "0.2.3",
     "module": "index.ts",
     "type": "module",
     "scripts": {
