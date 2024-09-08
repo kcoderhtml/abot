@@ -30,7 +30,7 @@ export async function getHackerNews(
                 `https://hacker-news.firebaseio.com/v0/item/${storyId}.json`
             ).then((res) => res.json())
 
-            return `\n\n> _<${story.title}|${story.url}> - <https://news.ycombinator.com/item?id=${storyId}|comments>_`
+            return `\n\n> _<${story.url}|${story.title}> - <https://news.ycombinator.com/item?id=${storyId}|comments>_`
         })
     )) as string[]
 
