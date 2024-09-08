@@ -22,7 +22,7 @@ export async function getHackerNews(channel: string, user: string, app: SlackApp
         const story = await fetch(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`)
             .then(res => res.json());
 
-        return `\n\n> _ ${story.title} - ${story.url} _`;
+        return `\n\n> _<${story.title}|${story.url}> - <https://news.ycombinator.com/item?id=${storyId}|comments>_`;
     })) as string[];
 
     // Ensure final message update
